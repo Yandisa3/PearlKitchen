@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl's Cafe - Track Order</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* ========== TOP NAVBAR ========== */
+        .top-nav {
+            background: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav .brand {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .top-nav .brand span {
+            color: #dc3545;
+        }
+
+        .top-nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-nav .nav-links a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.3s;
+        }
+
+        .top-nav .nav-links a:hover {
+            color: #dc3545;
+        }
+
+        .top-nav .nav-links .cart-link {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .top-nav .nav-links .cart-link:hover {
+            background: #c82333;
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .page-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            color: #888;
+            font-size: 0.95em;
+            margin-bottom: 25px;
+        }
+
+        /* ========== TRACKING CARD ========== */
+        .track-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .track-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .track-header .order-id {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .track-header .order-id span {
+            color: #888;
+            font-weight: 400;
+        }
+
+        .track-header .order-status-badge {
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .order-status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .order-status-badge.processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .order-status-badge.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        .order-status-badge.cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ========== TIMELINE ========== */
+        .timeline {
+            margin: 20px 0 25px;
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .timeline-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 42px;
+            bottom: -6px;
+            width: 2px;
+            background: #e8e8e8;
+            z-index: 0;
+        }
+
+        .timeline-step .step-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #e8e8e8;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: 700;
+            color: #bbb;
+            flex-shrink: 0;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .timeline-step.completed .step-icon {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .timeline-step.completed .step-icon i {
+            color: white;
+        }
+
+        .timeline-step.active .step-icon {
+            border-color: #ffc107;
+            background: #ffc107;
+            color: #333;
+        }
+
+        .timeline-step.active .step-icon i {
+            color: #333;
+        }
+
+        .timeline-step .step-content {
+            flex: 1;
+            padding-top: 4px;
+        }
+
+        .timeline-step .step-content .step-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 1em;
+        }
+
+        .timeline-step .step-content .step-time {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .timeline-step.completed .step-content .step-title {
+            color: #1a1a1a;
+        }
+
+        .timeline-step.active .step-content .step-title {
+            color: #ffc107;
+        }
+
+        .timeline-step:not(.completed):not(.active) .step-content .step-title {
+            color: #bbb;
+        }
+
+        /* ========== LIVE TRACKING ========== */
+        .live-tracking {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 10px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .live-tracking .live-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .live-tracking .live-header .live-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .live-tracking .live-header h3 {
+            font-size: 1em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .live-tracking .live-status {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #dc3545;
+            margin: 6px 0 4px;
+        }
+
+        .live-tracking .live-estimate {
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .live-tracking .live-estimate strong {
+            color: #1a1a1a;
+        }
+
+        .live-tracking .live-message {
+            margin-top: 6px;
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        /* ========== BACK BUTTON ========== */
+        .btn-back {
+            display: inline-block;
+            padding: 12px 28px;
+            border: 2px solid #dc3545;
+            border-radius: 30px;
+            background: transparent;
+            color: #dc3545;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn-back:hover {
+            background: #dc3545;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        /* ========== EMPTY STATE ========== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .empty-state i {
+            font-size: 3.5em;
+            color: #ddd;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #888;
+        }
+
+        .empty-state .btn-browse {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 40px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .empty-state .btn-browse:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 12px 18px;
+                flex-wrap: wrap;
+            }
+
+            .top-nav .brand {
+                font-size: 1.1em;
+            }
+
+            .top-nav .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+            }
+
+            .top-nav .nav-links.open {
+                display: flex;
+            }
+
+            .top-nav .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 8px 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-content {
+                padding: 20px 15px 40px;
+            }
+
+            .page-title {
+                font-size: 1.4em;
+            }
+
+            .track-card {
+                padding: 20px 18px;
+            }
+
+            .track-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .timeline-step {
+                gap: 12px;
+                padding: 8px 0;
+            }
+
+            .timeline-step .step-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 0.6em;
+            }
+
+            .timeline-step:not(:last-child)::after {
+                left: 14px;
+                top: 36px;
+            }
+
+            .live-tracking {
+                padding: 16px 18px;
+            }
+
+            .live-tracking .live-status {
+                font-size: 1em;
+            }
+
+            .btn-back {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .track-card {
+                padding: 16px 14px;
+            }
+
+            .timeline-step .step-content .step-title {
+                font-size: 0.9em;
+            }
+
+            .timeline-step .step-content .step-time {
+                font-size: 0.7em;
+            }
+
+            .live-tracking .live-status {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOP NAVBAR ===== -->
+    <nav class="top-nav">
+        <div style="display:flex;align-items:center;gap:15px;">
+            <button class="menu-toggle" onclick="toggleMobileNav()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="brand">Pearl's <span>Cafe</span></div>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="menu.html"><i class="fas fa-utensils"></i> Menu</a>
+            <a href="orders.html"><i class="fas fa-clipboard-list"></i> My Orders</a>
+            <a href="cart.html" class="cart-link"><i class="fas fa-shopping-cart"></i> Cart (<span id="cartCount">0</span>)</a>
+            <a href="#" onclick="logout()" style="color:#dc3545;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <h1 class="page-title">Track Your Order</h1>
+        <p class="page-subtitle">Real-time delivery updates</p>
+
+        <div id="trackContainer">
+            <!-- Rendered by JavaScript -->
+        </div>
+
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // ---- Auth Check ----
+        if (!requireAuth()) {
+            window.location.href = '../index.html';
+        }
+
+        const user = getCurrentUser();
+
+        // ---- Mobile Nav Toggle ----
+        function toggleMobileNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        // ---- Update Cart Count ----
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // ---- Logout ----
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userId');
+                window.location.href = '../index.html';
+            }
+        }
+
+        // ---- Load Order ----
+        async function loadOrder() {
+            const container = document.getElementById('trackContainer');
+
+            // Get order ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+
+            try {
+                let order;
+
+                if (orderId) {
+                    // Fetch specific order
+                    const orders = await getOrders();
+                    order = orders.find(o => o.id == orderId && o.userId === user.id);
+                } else {
+                    // Get most recent order
+                    const orders = await getOrders();
+                    const userOrders = orders.filter(o => o.userId === user.id);
+                    order = userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
+                }
+
+                if (!order) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-box-open"></i>
+                            <h3>No Order Found</h3>
+                            <p>${orderId ? 'Order not found or you don\'t have permission to view it.' : 'You haven\'t placed any orders yet.'}</p>
+                            ${!orderId ? '<a href="menu.html" class="btn-browse">Browse Menu</a>' : ''}
+                            <br><a href="orders.html" class="btn-back" style="margin-top:15px;display:inline-block;">Back to My Orders</a>
+                        </div>
+                    `;
+                    updateCartCount();
+                    return;
+                }
+
+                // ---- Build Timeline ----
+                const statusSteps = [
+                    { key: 'placed', label: 'Order Placed', time: order.createdAt },
+                    { key: 'accepted', label: 'Accepted', time: order.createdAt ? new Date(new Date(order.createdAt).getTime() + 5 * 60000).toISOString() : null },
+                    { key: 'preparing', label: 'Preparing', time: order.createdAt ? new Date(new Date(order.createdAt).getTime() + 15 * 60000).toISOString() : null },
+                    { key: 'onway', label: 'On the Way', time: order.createdAt ? new Date(new Date(order.createdAt).getTime() + 25 * 60000).toISOString() : null },
+                    { key: 'delivered', label: 'Delivered', time: order.createdAt ? new Date(new Date(order.createdAt).getTime() + 40 * 60000).toISOString() : null }
+                ];
+
+                // Determine current step based on order status
+                let currentStepIndex = 0;
+                switch (order.status) {
+                    case 'pending': currentStepIndex = 1; break; // Order placed -> step 0
+                    case 'processing': currentStepIndex = 2; break;
+                    case 'completed': currentStepIndex = 4; break;
+                    case 'cancelled': currentStepIndex = -1; break;
+                    default: currentStepIndex = 0;
+                }
+                // For pending, we consider placed as step 0, but we want to show "Order Placed" as completed
+                // So we adjust:
+                // pending: placed done, accepted not done
+                // processing: placed & accepted done, preparing active
+                // completed: all done
+                // cancelled: all cancelled
+
+                // Build the timeline HTML
+                let timelineHTML = '';
+                const statusList = ['placed', 'accepted', 'preparing', 'onway', 'delivered'];
+                const statusLabels = ['Order Placed', 'Accepted', 'Preparing', 'On the Way', 'Delivered'];
+
+                // Determine completion for each step
+                let completedUntil = 0;
+                if (order.status === 'pending') completedUntil = 0; // only placed
+                else if (order.status === 'processing') completedUntil = 1; // placed + accepted
+                else if (order.status === 'completed') completedUntil = 4; // all
+                else if (order.status === 'cancelled') completedUntil = -1; // none
+
+                // Generate step HTML
+                statusList.forEach((key, index) => {
+                    let stepClass = '';
+                    let iconHTML = '';
+                    let timeDisplay = '';
+
+                    if (order.status === 'cancelled') {
+                        stepClass = '';
+                        iconHTML = '<i class="fas fa-times" style="color:#dc3545;"></i>';
+                    } else if (index <= completedUntil) {
+                        stepClass = 'completed';
+                        iconHTML = '<i class="fas fa-check"></i>';
+                        // Show time if available
+                        const stepTime = statusSteps[index].time;
+                        if (stepTime) {
+                            const d = new Date(stepTime);
+                            timeDisplay = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        }
+                    } else if (index === completedUntil + 1 && order.status !== 'completed' && order.status !== 'cancelled') {
+                        stepClass = 'active';
+                        iconHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+                    } else {
+                        stepClass = '';
+                        iconHTML = '';
+                    }
+
+                    timelineHTML += `
+                        <div class="timeline-step ${stepClass}">
+                            <div class="step-icon">
+                                ${iconHTML || index + 1}
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">${statusLabels[index]}</div>
+                                ${timeDisplay ? `<div class="step-time">${timeDisplay}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // ---- Live Tracking Section ----
+                let liveStatus = '';
+                let liveEstimate = '';
+                let liveMessage = '';
+                let statusColor = '';
+
+                switch (order.status) {
+                    case 'pending':
+                        liveStatus = 'Order Placed';
+                        liveEstimate = 'Awaiting confirmation';
+                        liveMessage = 'Your order has been received and is waiting for restaurant acceptance.';
+                        statusColor = '#856404';
+                        break;
+                    case 'processing':
+                        liveStatus = 'Preparing Your Food';
+                        liveEstimate = '15 - 20 mins';
+                        liveMessage = 'Your food is being prepared with care.';
+                        statusColor = '#004085';
+                        break;
+                    case 'completed':
+                        liveStatus = 'Delivered! ✅';
+                        liveEstimate = 'Delivered';
+                        liveMessage = 'Your order has been delivered. Enjoy your meal!';
+                        statusColor = '#155724';
+                        break;
+                    case 'cancelled':
+                        liveStatus = 'Cancelled ❌';
+                        liveEstimate = '---';
+                        liveMessage = 'This order has been cancelled.';
+                        statusColor = '#721c24';
+                        break;
+                    default:
+                        liveStatus = 'On the Way';
+                        liveEstimate = '20 - 30 mins';
+                        liveMessage = 'Your delivery partner is on the way.';
+                        statusColor = '#dc3545';
+                }
+
+                // ---- Render Card ----
+                container.innerHTML = `
+                    <div class="track-card">
+                        <div class="track-header">
+                            <div class="order-id">Order ID: <span>#${order.id}</span></div>
+                            <span class="order-status-badge ${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="timeline">
+                            ${timelineHTML}
+                        </div>
+
+                        <!-- Live Tracking -->
+                        <div class="live-tracking">
+                            <div class="live-header">
+                                <span class="live-dot"></span>
+                                <h3>Live Tracking</h3>
+                            </div>
+                            <div class="live-status" style="color:${statusColor};">${liveStatus}</div>
+                            <div class="live-estimate">
+                                <strong>Estimated Delivery Time</strong><br>
+                                ${liveEstimate}
+                            </div>
+                            <div class="live-message">${liveMessage}</div>
+                        </div>
+
+                        <a href="orders.html" class="btn-back">← Back to My Orders</a>
+                    </div>
+                `;
+
+                updateCartCount();
+
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Order</h3>
+                        <p>Please try again later.</p>
+                        <a href="orders.html" class="btn-back" style="display:inline-block;margin-top:15px;">Back to My Orders</a>
+                    </div>
+                `;
+            }
+        }
+
+        // ---- Init ----
+        loadOrder();
+    </script>
+
+</body>
+</html>

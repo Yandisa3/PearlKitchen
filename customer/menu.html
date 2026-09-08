@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl's Cafe - Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* ========== TOP NAVBAR ========== */
+        .top-nav {
+            background: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav .brand {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .top-nav .brand span {
+            color: #dc3545;
+        }
+
+        .top-nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-nav .nav-links a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.3s;
+        }
+
+        .top-nav .nav-links a:hover {
+            color: #dc3545;
+        }
+
+        .top-nav .nav-links .cart-link {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .top-nav .nav-links .cart-link:hover {
+            background: #c82333;
+            color: white;
+        }
+
+        .top-nav .nav-links .cart-link i {
+            margin-right: 6px;
+        }
+
+        /* ========== MOBILE HAMBURGER ========== */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* ========== MAIN LAYOUT ========== */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* ========== PAGE HEADER ========== */
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 0.95em;
+            margin-top: 4px;
+        }
+
+        /* ========== CATEGORIES ========== */
+        .categories-section {
+            margin-bottom: 30px;
+        }
+
+        .categories-section .cat-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category-tabs .cat-btn {
+            padding: 8px 22px;
+            border: 2px solid #e8e8e8;
+            border-radius: 30px;
+            background: white;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-tabs .cat-btn:hover {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .category-tabs .cat-btn.active {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        /* ========== MENU LIST ========== */
+        .menu-list {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+            cursor: default;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background: #fafbfc;
+        }
+
+        .menu-item .item-info {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .menu-item .item-info .item-name {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .menu-item .item-info .item-name .item-sub {
+            font-weight: 400;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .menu-item .item-info .item-desc {
+            font-size: 0.88em;
+            color: #888;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .menu-item .item-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-shrink: 0;
+        }
+
+        .menu-item .item-right .item-price {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #dc3545;
+            white-space: nowrap;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .menu-item .item-right .btn-add {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: #f8f9fa;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e8e8e8;
+            color: #555;
+        }
+
+        .menu-item .item-right .btn-add:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            transform: scale(1.08);
+        }
+
+        .menu-item .item-right .btn-add.in-cart {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        /* ========== EMPTY STATE ========== */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 3em;
+            color: #ddd;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 12px 18px;
+                flex-wrap: wrap;
+            }
+
+            .top-nav .brand {
+                font-size: 1.1em;
+            }
+
+            .top-nav .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+            }
+
+            .top-nav .nav-links.open {
+                display: flex;
+            }
+
+            .top-nav .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 8px 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-content {
+                padding: 20px 15px 40px;
+            }
+
+            .menu-item {
+                padding: 15px 16px;
+                flex-wrap: wrap;
+            }
+
+            .menu-item .item-info {
+                padding-right: 10px;
+            }
+
+            .menu-item .item-right {
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: 8px;
+                gap: 14px;
+            }
+
+            .menu-item .item-info .item-name {
+                font-size: 0.95em;
+            }
+
+            .category-tabs .cat-btn {
+                padding: 6px 16px;
+                font-size: 0.8em;
+            }
+
+            .page-header h1 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-item .item-info .item-name {
+                font-size: 0.9em;
+            }
+
+            .menu-item .item-info .item-desc {
+                font-size: 0.8em;
+            }
+
+            .menu-item .item-right .item-price {
+                font-size: 0.95em;
+                min-width: 60px;
+            }
+
+            .menu-item .item-right .btn-add {
+                width: 34px;
+                height: 34px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOP NAVBAR ===== -->
+    <nav class="top-nav">
+        <div style="display:flex;align-items:center;gap:15px;">
+            <button class="menu-toggle" onclick="toggleMobileNav()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="brand">Pearl's <span>Cafe</span></div>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="menu.html" style="color:#dc3545;font-weight:600;"><i class="fas fa-utensils"></i> Menu</a>
+            <a href="orders.html"><i class="fas fa-clipboard-list"></i> My Orders</a>
+            <a href="cart.html" class="cart-link"><i class="fas fa-shopping-cart"></i> Cart (<span id="cartCount">0</span>)</a>
+            <a href="#" onclick="logout()" style="color:#dc3545;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- ===== HEADER ===== -->
+        <div class="page-header">
+            <h1>🍽️ Our Menu</h1>
+            <p>Fresh, delicious food made with love</p>
+        </div>
+
+        <!-- ===== CATEGORIES ===== -->
+        <div class="categories-section">
+            <div class="cat-label">Categories</div>
+            <div class="category-tabs" id="categoryTabs">
+                <button class="cat-btn active" data-category="all">All Menu</button>
+                <!-- Categories will be dynamically added -->
+            </div>
+        </div>
+
+        <!-- ===== MENU LIST ===== -->
+        <div class="menu-list" id="menuList">
+            <!-- Items rendered by JavaScript -->
+        </div>
+
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // ---- Auth Check ----
+        if (!requireAuth()) {
+            window.location.href = '../index.html';
+        }
+
+        // ---- Mobile Nav Toggle ----
+        function toggleMobileNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        // ---- State ----
+        let allItems = [];
+        let currentCategory = 'all';
+        let cart = [];
+
+        // ---- Load Cart ----
+        function loadCart() {
+            cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // ---- Add to Cart ----
+        function addToCart(itemId, itemName, itemPrice) {
+            const existing = cart.find(item => item.id === itemId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id: itemId, name: itemName, price: itemPrice, quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderMenu(allItems, currentCategory); // refresh to update button states
+        }
+
+        // ---- Check if item is in cart ----
+        function isInCart(itemId) {
+            return cart.some(item => item.id === itemId);
+        }
+
+        // ---- Render Menu ----
+        function renderMenu(items, category) {
+            const container = document.getElementById('menuList');
+            let filtered = category === 'all' ? items : items.filter(item => (item.category || 'Other') === category);
+
+            // Only show available items
+            filtered = filtered.filter(item => item.isAvailable !== false);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-utensils"></i>
+                        <p>No items available in this category.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => {
+                const inCart = isInCart(item.id);
+                return `
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-name">
+                                ${item.name}
+                                ${item.subName ? `<span class="item-sub">${item.subName}</span>` : ''}
+                            </div>
+                            ${item.description ? `<div class="item-desc">${item.description}</div>` : ''}
+                        </div>
+                        <div class="item-right">
+                            <span class="item-price">R${item.price.toFixed(2)}</span>
+                            <button class="btn-add ${inCart ? 'in-cart' : ''}" 
+                                    onclick="addToCart(${item.id}, '${item.name.replace(/'/g, "\\'")}', ${item.price})"
+                                    title="${inCart ? 'In Cart' : 'Add to Cart'}">
+                                ${inCart ? '✓' : '🍗'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ---- Load Categories ----
+        function loadCategories(items) {
+            const categories = ['all'];
+            items.forEach(item => {
+                const cat = item.category || 'Other';
+                if (!categories.includes(cat) && item.isAvailable !== false) {
+                    categories.push(cat);
+                }
+            });
+
+            const container = document.getElementById('categoryTabs');
+            // Keep the "All" button and add others
+            container.innerHTML = categories.map(cat => `
+                <button class="cat-btn ${cat === currentCategory ? 'active' : ''}" 
+                        data-category="${cat}"
+                        onclick="filterCategory('${cat}')">
+                    ${cat === 'all' ? 'All Menu' : cat}
+                </button>
+            `).join('');
+        }
+
+        // ---- Filter by Category ----
+        function filterCategory(category) {
+            currentCategory = category;
+            // Update active button
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === category);
+            });
+            renderMenu(allItems, category);
+            // Close mobile nav if open
+            document.getElementById('navLinks').classList.remove('open');
+        }
+
+        // ---- Load Menu Data ----
+        async function loadMenu() {
+            try {
+                const data = await getMenuItems();
+                allItems = data;
+                loadCategories(data);
+                renderMenu(data, currentCategory);
+                loadCart();
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                document.getElementById('menuList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Error loading menu. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ---- Logout ----
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userId');
+                window.location.href = '../index.html';
+            }
+        }
+
+        // ---- Init ----
+        loadMenu();
+
+        // ---- Listen for cart changes from other tabs ----
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cart') {
+                loadCart();
+                renderMenu(allItems, currentCategory);
+            }
+        });
+    </script>
+
+</body>
+</html>

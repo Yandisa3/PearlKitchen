@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl's Cafe - Manage Employees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; min-height: 100vh; }
+
+        .top-nav {
+            background: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .top-nav .brand { font-size: 1.3em; font-weight: 700; color: #1a1a1a; }
+        .top-nav .brand span { color: #dc3545; }
+        .top-nav .nav-links { display: flex; align-items: center; gap: 20px; }
+        .top-nav .nav-links a { color: #555; text-decoration: none; font-weight: 500; font-size: 0.95em; transition: color 0.3s; }
+        .top-nav .nav-links a:hover { color: #dc3545; }
+        .top-nav .nav-links a.active { color: #dc3545; font-weight: 600; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #333; }
+
+        .main-content { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .page-title { font-size: 1.8em; font-weight: 700; color: #1a1a1a; margin-bottom: 25px; }
+
+        .employee-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; padding: 16px 22px; border-radius: 12px; margin-bottom: 12px;
+            border: 1px solid #f0f0f0; transition: all 0.3s;
+        }
+        .employee-row:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .employee-row .info { display: flex; flex-direction: column; gap: 2px; }
+        .employee-row .info .name { font-weight: 600; color: #1a1a1a; }
+        .employee-row .info .email { font-size: 0.9em; color: #888; }
+        .employee-row .info .role { font-size: 0.8em; padding: 2px 12px; border-radius: 30px; background: #e8e8e8; color: #555; display: inline-block; margin-top: 4px; }
+        .employee-row .info .status { font-size: 0.8em; font-weight: 600; }
+        .employee-row .info .status.active { color: #28a745; }
+        .employee-row .info .status.inactive { color: #dc3545; }
+        .employee-row .actions button { padding: 6px 18px; border: none; border-radius: 30px; font-weight: 600; font-size: 0.8em; cursor: pointer; transition: all 0.3s; }
+        .employee-row .actions .btn-toggle { background: #e8e8e8; color: #555; }
+        .employee-row .actions .btn-toggle:hover { background: #dc3545; color: white; }
+
+        .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: 16px; border: 1px solid #f0f0f0; color: #888; }
+        .empty-state i { font-size: 3.5em; color: #ddd; display: block; margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .top-nav { padding: 12px 18px; flex-wrap: wrap; }
+            .top-nav .nav-links { display: none; width: 100%; flex-direction: column; gap: 10px; padding-top: 15px; border-top: 1px solid #eee; margin-top: 10px; }
+            .top-nav .nav-links.open { display: flex; }
+            .top-nav .nav-links a { width: 100%; text-align: center; padding: 8px 0; }
+            .menu-toggle { display: block; }
+            .main-content { padding: 20px 15px 40px; }
+            .page-title { font-size: 1.4em; }
+            .employee-row { flex-direction: column; align-items: stretch; gap: 12px; text-align: center; }
+            .employee-row .actions { display: flex; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div style="display:flex;align-items:center;gap:15px;">
+            <button class="menu-toggle" onclick="toggleMobileNav()"><i class="fas fa-bars"></i></button>
+            <div class="brand">Pearl's <span>Cafe</span></div>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="menu.html"><i class="fas fa-utensils"></i> Menu</a>
+            <a href="employees.html" class="active"><i class="fas fa-users"></i> Employees</a>
+            <a href="sales.html"><i class="fas fa-chart-bar"></i> Sales</a>
+            <a href="feedback.html"><i class="fas fa-star"></i> Feedback</a>
+            <a href="#" onclick="logout()" style="color:#dc3545;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1 class="page-title">Manage Employees</h1>
+        <div id="employeeList"></div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        if (!requireAuth()) window.location.href = '../index.html';
+        const user = getCurrentUser();
+        if (user.role !== 'owner') window.location.href = '../customer/menu.html';
+
+        function toggleMobileNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+        async function loadEmployees() {
+            try {
+                const users = await getUsers();
+                const employees = users.filter(u => u.role === 'employee' || u.role === 'driver');
+                const container = document.getElementById('employeeList');
+                if (!employees.length) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><p>No employees found.</p></div>`;
+                    return;
+                }
+                container.innerHTML = employees.map(emp => `
+                    <div class="employee-row">
+                        <div class="info">
+                            <span class="name">${emp.firstName} ${emp.lastName}</span>
+                            <span class="email">${emp.email}</span>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px;">
+                                <span class="role">${emp.role}</span>
+                                <span class="status ${emp.isActive ? 'active' : 'inactive'}">${emp.isActive ? '✅ Active' : '❌ Inactive'}</span>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-toggle" onclick="toggleEmployee(${emp.id}, ${!emp.isActive})">${emp.isActive ? 'Deactivate' : 'Activate'}</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) { console.error(error); }
+        }
+
+        async function toggleEmployee(id, isActive) {
+            try { await updateUser(id, { isActive }); loadEmployees(); } catch (e) { alert('Failed to update employee status'); }
+        }
+
+        function logout() { if (confirm('Logout?')) { localStorage.removeItem('currentUser'); localStorage.removeItem('userId'); window.location.href = '../index.html'; } }
+        loadEmployees();
+    </script>
+</body>
+</html>

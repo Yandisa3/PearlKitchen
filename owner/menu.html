@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl's Cafe - Manage Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; min-height: 100vh; }
+
+        .top-nav {
+            background: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .top-nav .brand { font-size: 1.3em; font-weight: 700; color: #1a1a1a; }
+        .top-nav .brand span { color: #dc3545; }
+        .top-nav .nav-links { display: flex; align-items: center; gap: 20px; }
+        .top-nav .nav-links a { color: #555; text-decoration: none; font-weight: 500; font-size: 0.95em; transition: color 0.3s; }
+        .top-nav .nav-links a:hover { color: #dc3545; }
+        .top-nav .nav-links a.active { color: #dc3545; font-weight: 600; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #333; }
+
+        .main-content { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .page-title { font-size: 1.8em; font-weight: 700; color: #1a1a1a; margin-bottom: 25px; }
+
+        .card { background: white; border-radius: 16px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; margin-bottom: 20px; }
+        .card h3 { font-size: 1.1em; font-weight: 600; color: #1a1a1a; margin-bottom: 16px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-grid input { width: 100%; padding: 12px 16px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 15px; background: #fafafa; transition: all 0.3s; }
+        .form-grid input:focus { outline: none; border-color: #dc3545; background: white; box-shadow: 0 0 0 4px rgba(220,53,69,0.08); }
+        .form-grid .btn-submit { grid-column: 1/-1; padding: 14px; border: none; border-radius: 12px; background: #dc3545; color: white; font-weight: 700; font-size: 1em; cursor: pointer; transition: all 0.3s; }
+        .form-grid .btn-submit:hover { background: #c82333; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(220,53,69,0.3); }
+
+        .menu-item-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 18px; border-bottom: 1px solid #f0f0f0; transition: background 0.2s;
+        }
+        .menu-item-row:hover { background: #fafbfc; }
+        .menu-item-row:last-child { border-bottom: none; }
+        .menu-item-row .item-info { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .menu-item-row .item-info .name { font-weight: 600; color: #1a1a1a; }
+        .menu-item-row .item-info .price { color: #dc3545; font-weight: 600; }
+        .menu-item-row .item-info .status { font-size: 0.8em; padding: 2px 12px; border-radius: 30px; }
+        .menu-item-row .item-info .status.available { background: #d4edda; color: #155724; }
+        .menu-item-row .item-info .status.unavailable { background: #f8d7da; color: #721c24; }
+        .menu-item-row .actions { display: flex; gap: 8px; }
+        .menu-item-row .actions button { padding: 6px 16px; border: none; border-radius: 30px; font-weight: 600; font-size: 0.8em; cursor: pointer; transition: all 0.3s; }
+        .menu-item-row .actions .btn-toggle { background: #e8e8e8; color: #555; }
+        .menu-item-row .actions .btn-toggle:hover { background: #dc3545; color: white; }
+        .menu-item-row .actions .btn-delete { background: #f8d7da; color: #dc3545; }
+        .menu-item-row .actions .btn-delete:hover { background: #dc3545; color: white; }
+
+        .message { margin-top: 18px; padding: 14px 18px; border-radius: 12px; text-align: center; display: none; font-weight: 500; }
+        .message.success { display: block; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .message.error { display: block; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: #888; }
+        .empty-state i { font-size: 3em; color: #ddd; display: block; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .top-nav { padding: 12px 18px; flex-wrap: wrap; }
+            .top-nav .nav-links { display: none; width: 100%; flex-direction: column; gap: 10px; padding-top: 15px; border-top: 1px solid #eee; margin-top: 10px; }
+            .top-nav .nav-links.open { display: flex; }
+            .top-nav .nav-links a { width: 100%; text-align: center; padding: 8px 0; }
+            .menu-toggle { display: block; }
+            .main-content { padding: 20px 15px 40px; }
+            .page-title { font-size: 1.4em; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-grid .btn-submit { grid-column: 1; }
+            .menu-item-row { flex-direction: column; align-items: stretch; gap: 10px; }
+            .menu-item-row .actions { justify-content: flex-end; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div style="display:flex;align-items:center;gap:15px;">
+            <button class="menu-toggle" onclick="toggleMobileNav()"><i class="fas fa-bars"></i></button>
+            <div class="brand">Pearl's <span>Cafe</span></div>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="menu.html" class="active"><i class="fas fa-utensils"></i> Menu</a>
+            <a href="employees.html"><i class="fas fa-users"></i> Employees</a>
+            <a href="sales.html"><i class="fas fa-chart-bar"></i> Sales</a>
+            <a href="feedback.html"><i class="fas fa-star"></i> Feedback</a>
+            <a href="#" onclick="logout()" style="color:#dc3545;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1 class="page-title">Manage Menu</h1>
+
+        <div class="card">
+            <h3>Add New Item</h3>
+            <form id="addItemForm" class="form-grid">
+                <input type="text" id="itemName" placeholder="Item Name" required>
+                <input type="text" id="itemDescription" placeholder="Description">
+                <input type="number" id="itemPrice" placeholder="Price (R)" step="0.01" required>
+                <input type="text" id="itemCategory" placeholder="Category">
+                <input type="text" id="itemImage" placeholder="Image URL">
+                <button type="submit" class="btn-submit">Add Item</button>
+            </form>
+        </div>
+
+        <div id="menuList"></div>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        if (!requireAuth()) window.location.href = '../index.html';
+        const user = getCurrentUser();
+        if (user.role !== 'owner') window.location.href = '../customer/menu.html';
+
+        function toggleMobileNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+        async function loadMenu() {
+            try {
+                const items = await getMenuItems();
+                const container = document.getElementById('menuList');
+                if (items.length === 0) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-utensils"></i><p>No menu items yet.</p></div>`;
+                    return;
+                }
+                container.innerHTML = items.map(item => `
+                    <div class="menu-item-row">
+                        <div class="item-info">
+                            <span class="name">${item.name}</span>
+                            <span class="price">R${item.price.toFixed(2)}</span>
+                            <span class="status ${item.isAvailable ? 'available' : 'unavailable'}">${item.isAvailable ? '✅ Available' : '❌ Unavailable'}</span>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-toggle" onclick="toggleAvailability(${item.id}, ${!item.isAvailable})">${item.isAvailable ? 'Hide' : 'Show'}</button>
+                            <button class="btn-delete" onclick="deleteItem(${item.id})">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) { console.error(error); }
+        }
+
+        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('itemName').value;
+            const description = document.getElementById('itemDescription').value;
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            const category = document.getElementById('itemCategory').value;
+            const image = document.getElementById('itemImage').value;
+            const msg = document.getElementById('message');
+            try {
+                await createMenuItem({ id: Date.now(), name, description, price, category, image: image || 'https://via.placeholder.com/300x200?text=Food', isAvailable: true, createdAt: new Date().toISOString() });
+                msg.textContent = 'Item added successfully!'; msg.className = 'message success';
+                document.getElementById('addItemForm').reset();
+                loadMenu();
+            } catch (error) {
+                msg.textContent = 'Failed: ' + error.message; msg.className = 'message error';
+            }
+        });
+
+        async function toggleAvailability(id, isAvailable) {
+            try { await updateMenuItem(id, { isAvailable }); loadMenu(); } catch (e) { alert('Failed to update item'); }
+        }
+        async function deleteItem(id) {
+            if (!confirm('Delete this item?')) return;
+            try { await deleteMenuItem(id); loadMenu(); } catch (e) { alert('Failed to delete item'); }
+        }
+
+        function logout() { if (confirm('Logout?')) { localStorage.removeItem('currentUser'); localStorage.removeItem('userId'); window.location.href = '../index.html'; } }
+        loadMenu();
+    </script>
+</body>
+</html>

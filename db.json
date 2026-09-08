@@ -1,0 +1,504 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@test.com",
+      "password": "password123",
+      "phone": "1234567890",
+      "role": "customer",
+      "isActive": true,
+      "resetToken": null
+    },
+    {
+      "id": 2,
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "owner@test.com",
+      "password": "password123",
+      "phone": "0987654321",
+      "role": "owner",
+      "isActive": true,
+      "resetToken": null
+    },
+    {
+      "id": 1787762999479,
+      "firstName": "yandisa",
+      "lastName": "mayay",
+      "email": "mbentsulayandisa@gmail.com",
+      "password": "yandisa",
+      "phone": "0784597932",
+      "role": "customer",
+      "isActive": true,
+      "createdAt": "2026-08-26T16:49:59.479Z",
+      "resetToken": "9s9jdh"
+    },
+    {
+      "id": 1787763206043,
+      "firstName": "Yandisa",
+      "lastName": "Mayaya",
+      "email": "yandisa@gmail.com",
+      "password": "123456",
+      "phone": "0784597932",
+      "role": "owner",
+      "isActive": true,
+      "createdAt": "2026-08-26T16:53:26.043Z"
+    },
+    {
+      "id": 1787763467412,
+      "firstName": "Luvuyo ",
+      "lastName": "Msimango",
+      "email": "lvovoluvuyo88@gmail.com",
+      "password": "Luvuyo4606",
+      "phone": "0633637783",
+      "role": "customer",
+      "isActive": true,
+      "createdAt": "2026-08-26T16:57:47.412Z"
+    },
+    {
+      "id": 1787815316262,
+      "firstName": "Owam",
+      "lastName": "Mgxaso",
+      "email": "OG@gmail.com",
+      "password": "123456789",
+      "phone": "0784597935",
+      "role": "owner",
+      "isActive": true,
+      "createdAt": "2026-08-27T07:21:56.262Z"
+    },
+    {
+      "id": 1788164047243,
+      "firstName": "jack",
+      "lastName": "Jill",
+      "email": "jack@gmail.com",
+      "password": "789456123",
+      "phone": "01245313654",
+      "role": "customer",
+      "isActive": true,
+      "createdAt": "2026-08-31T08:14:07.243Z"
+    },
+    {
+      "id": 1788166760277,
+      "firstName": "Thobela",
+      "lastName": "rangayi",
+      "email": "rangayi@gmail.com",
+      "password": "rangayi",
+      "phone": "124567890",
+      "role": "employee",
+      "isActive": true,
+      "createdAt": "2026-08-31T08:59:20.277Z"
+    },
+    {
+      "id": 1788171353728,
+      "firstName": "Hlathi",
+      "lastName": "Skillo ",
+      "email": "skillo@gmail.com",
+      "password": "skilllo",
+      "phone": "4597932",
+      "role": "driver",
+      "isActive": true,
+      "createdAt": "2026-08-31T10:15:53.728Z"
+    },
+    {
+      "id": 1788337930409,
+      "firstName": "lil",
+      "lastName": "wayne",
+      "email": "lilwayne@gmail.com",
+      "password": "222222",
+      "phone": "22222222",
+      "role": "customer",
+      "isActive": true,
+      "createdAt": "2026-09-02T08:32:10.409Z"
+    },
+    {
+      "id": 1788342259794,
+      "firstName": "deze",
+      "lastName": "what",
+      "email": "deze@gmail.com",
+      "password": "zzzzzzzzzz",
+      "phone": "245879622",
+      "role": "driver",
+      "isActive": true,
+      "createdAt": "2026-09-02T09:44:19.794Z"
+    },
+    {
+      "id": 1788453997908,
+      "firstName": "sandra",
+      "lastName": "ngaleka",
+      "email": "boni@gmail.com",
+      "password": "123456789",
+      "phone": "0812759954",
+      "role": "employee",
+      "isActive": true,
+      "createdAt": "2026-09-03T16:46:37.908Z"
+    },
+    {
+      "id": 1788455955649,
+      "firstName": "sandra",
+      "lastName": "gatya",
+      "email": "bro@gmail.com",
+      "password": "123456788",
+      "phone": "0812759989",
+      "role": "driver",
+      "isActive": true,
+      "createdAt": "2026-09-03T17:19:15.649Z"
+    }
+  ],
+  "menuItems": [
+    {
+      "id": 1,
+      "name": "Chips",
+      "subName": "Crispy chips",
+      "description": "Tomato & sweet chilli sauce",
+      "price": 22,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    },
+    {
+      "id": 2,
+      "name": "Chips",
+      "subName": "Russian",
+      "description": "",
+      "price": 18,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    },
+    {
+      "id": 3,
+      "name": "Chips & Sides",
+      "subName": "",
+      "description": "",
+      "price": 18,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    },
+    {
+      "id": 4,
+      "name": "Chips & Fish",
+      "subName": "",
+      "description": "Tomato or sweet chilli sauce",
+      "price": 88,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    },
+    {
+      "id": 5,
+      "name": "Bread",
+      "subName": "Chips & 2 russians",
+      "description": "Tomato or sweet chilli sauce",
+      "price": 80,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    },
+    {
+      "id": 6,
+      "name": "Drinks",
+      "subName": "1 loaf of bread",
+      "description": "",
+      "price": 29,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    },
+    {
+      "id": 7,
+      "name": "Drink-Coke (2L)",
+      "subName": "",
+      "description": "Refreshing cold drink",
+      "price": 38,
+      "category": "All",
+      "image": "",
+      "isAvailable": true
+    }
+  ],
+  "orders": [
+    {
+      "userId": 1787763467412,
+      "items": [
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 8.99,
+          "quantity": 1
+        },
+        {
+          "id": 4,
+          "name": "Milkshake",
+          "price": 4.99,
+          "quantity": 1
+        }
+      ],
+      "total": 13.98,
+      "status": "completed",
+      "type": "delivery",
+      "deliveryAddress": "old residence",
+      "createdAt": "2026-08-26T16:59:28.824Z",
+      "id": 1,
+      "driverId": 1788171353728
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 2,
+          "name": "Chicken Wrap",
+          "price": 6.99,
+          "quantity": 2
+        },
+        {
+          "id": 3,
+          "name": "French Fries",
+          "price": 3.49,
+          "quantity": 1
+        },
+        {
+          "id": 4,
+          "name": "Milkshake",
+          "price": 4.99,
+          "quantity": 1
+        },
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 8.99,
+          "quantity": 1
+        }
+      ],
+      "total": 31.450000000000003,
+      "status": "completed",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T08:48:23.753Z",
+      "id": 2
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 2,
+          "name": "Chicken Wrap",
+          "price": 6.99,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 8.99,
+          "quantity": 1
+        }
+      ],
+      "total": 22.97,
+      "status": "cancelled",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T08:49:39.424Z",
+      "id": 3
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 8.99,
+          "quantity": 1
+        },
+        {
+          "id": 2,
+          "name": "Chicken Wrap",
+          "price": 6.99,
+          "quantity": 1
+        }
+      ],
+      "total": 15.98,
+      "status": "completed",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T08:57:14.435Z",
+      "id": 4
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 8,
+          "name": "Iced Tea",
+          "price": 25,
+          "quantity": 1
+        },
+        {
+          "id": 7,
+          "name": "Chicken Nuggets",
+          "price": 55,
+          "quantity": 1
+        },
+        {
+          "id": 6,
+          "name": "Caesar Salad",
+          "price": 70,
+          "quantity": 1
+        }
+      ],
+      "total": 150,
+      "status": "processing",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T09:12:50.787Z",
+      "id": 5
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 85,
+          "quantity": 1
+        },
+        {
+          "id": 2,
+          "name": "Chicken Wrap",
+          "price": 65,
+          "quantity": 1
+        },
+        {
+          "id": 5,
+          "name": "Pepperoni Pizza",
+          "price": 120,
+          "quantity": 1
+        },
+        {
+          "id": 8,
+          "name": "Iced Tea",
+          "price": 25,
+          "quantity": 1
+        }
+      ],
+      "total": 295,
+      "status": "pending",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T09:16:28.306Z",
+      "id": 6
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 2,
+          "name": "Chicken Wrap",
+          "price": 65,
+          "quantity": 1
+        },
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 85,
+          "quantity": 1
+        },
+        {
+          "id": 3,
+          "name": "French Fries",
+          "price": 35,
+          "quantity": 1
+        }
+      ],
+      "total": 185,
+      "status": "completed",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T09:48:56.399Z",
+      "id": 7
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 1,
+          "name": "Classic Burger",
+          "price": 85,
+          "quantity": 2
+        },
+        {
+          "id": 2,
+          "name": "Chicken Wrap",
+          "price": 65,
+          "quantity": 1
+        },
+        {
+          "id": 3,
+          "name": "French Fries",
+          "price": 35,
+          "quantity": 1
+        },
+        {
+          "id": 4,
+          "name": "Milkshake",
+          "price": 45,
+          "quantity": 1
+        }
+      ],
+      "total": 315,
+      "status": "processing",
+      "type": "collection",
+      "deliveryAddress": null,
+      "createdAt": "2026-08-31T10:10:00.059Z",
+      "id": 8
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 2,
+          "name": "Chips",
+          "price": 18,
+          "quantity": 2
+        },
+        {
+          "id": 3,
+          "name": "Chips & Sides",
+          "price": 18,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "Chips",
+          "price": 22,
+          "quantity": 1
+        }
+      ],
+      "total": 94,
+      "status": "completed",
+      "type": "delivery",
+      "deliveryAddress": "36 star 2096",
+      "createdAt": "2026-09-03T16:57:50.249Z",
+      "id": 9,
+      "driverId": 1788455955649
+    },
+    {
+      "userId": 1788164047243,
+      "items": [
+        {
+          "id": 1,
+          "name": "Chips",
+          "price": 22,
+          "quantity": 1
+        }
+      ],
+      "total": 22,
+      "status": "completed",
+      "type": "delivery",
+      "deliveryAddress": "24 star road",
+      "createdAt": "2026-09-03T17:06:48.093Z",
+      "id": 10,
+      "driverId": 1788455955649
+    }
+  ],
+  "feedback": []
+}
