@@ -17,6 +17,12 @@
             background: #f8f9fa;
             min-height: 100vh;
         }
+        .menu-item .item-icon {
+            font-size: 1.8em;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
 
         /* ========== TOP NAVBAR ========== */
         .top-nav {
@@ -449,6 +455,19 @@
         function isInCart(itemId) {
             return cart.some(item => item.id === itemId);
         }
+        // ---- Pick an icon based on item name/category ----
+        function getItemIcon(item) {
+            const name = (item.name || '').toLowerCase();
+            const category = (item.category || '').toLowerCase();
+
+            if (name.includes('fish')) return '🐟';
+            if (name.includes('chip')) return '🍟';
+            if (name.includes('russian')) return '🌭';
+            if (name.includes('bread')) return '🍞';
+            if (name.includes('coffee')) return '☕';
+            if (category.includes('drink')) return '🥤';
+            return '🍽️';
+        }
 
         // ---- Render Menu ----
         function renderMenu(items, category) {
@@ -472,6 +491,7 @@
                 const inCart = isInCart(item.id);
                 return `
                     <div class="menu-item">
+                        <span class = "item-icon">${getItemIcon(item)}</span>
                         <div class="item-info">
                             <div class="item-name">
                                 ${item.name}
@@ -484,7 +504,7 @@
                             <button class="btn-add ${inCart ? 'in-cart' : ''}" 
                                     onclick="addToCart(${item.id}, '${item.name.replace(/'/g, "\\'")}', ${item.price})"
                                     title="${inCart ? 'In Cart' : 'Add to Cart'}">
-                                ${inCart ? '✓' : '🍗'}
+                                ${inCart ? '✓' : getItemIcon(item)}
                             </button>
                         </div>
                     </div>

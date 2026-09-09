@@ -146,77 +146,77 @@
     }
   ],
   "menuItems": [
-    {
-      "id": 1,
-      "name": "Chips",
-      "subName": "Crispy chips",
-      "description": "Tomato & sweet chilli sauce",
-      "price": 22,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    },
-    {
-      "id": 2,
-      "name": "Chips",
-      "subName": "Russian",
-      "description": "",
-      "price": 18,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    },
-    {
-      "id": 3,
-      "name": "Chips & Sides",
-      "subName": "",
-      "description": "",
-      "price": 18,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    },
-    {
-      "id": 4,
-      "name": "Chips & Fish",
-      "subName": "",
-      "description": "Tomato or sweet chilli sauce",
-      "price": 88,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    },
-    {
-      "id": 5,
-      "name": "Bread",
-      "subName": "Chips & 2 russians",
-      "description": "Tomato or sweet chilli sauce",
-      "price": 80,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    },
-    {
-      "id": 6,
-      "name": "Drinks",
-      "subName": "1 loaf of bread",
-      "description": "",
-      "price": 29,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    },
-    {
-      "id": 7,
-      "name": "Drink-Coke (2L)",
-      "subName": "",
-      "description": "Refreshing cold drink",
-      "price": 38,
-      "category": "All",
-      "image": "",
-      "isAvailable": true
-    }
-  ],
+  {
+    "id": 1,
+    "name": "Chips",
+    "subName": "Regular",
+    "description": "Tomato & sweet chilli sauce",
+    "price": 22,
+    "category": "Sides",
+    "image": "",
+    "isAvailable": true
+  },
+  {
+    "id": 2,
+    "name": "Russians",
+    "subName": "",
+    "description": "Grilled Russian sausage",
+    "price": 18,
+    "category": "Sides",
+    "image": "",
+    "isAvailable": true
+  },
+  {
+    "id": 3,
+    "name": "Chips & Sides",
+    "subName": "",
+    "description": "",
+    "price": 18,
+    "category": "Combos",
+    "image": "",
+    "isAvailable": true
+  },
+  {
+    "id": 4,
+    "name": "Fish and Chips",
+    "subName": "",
+    "description": "Tomato or sweet chilli sauce",
+    "price": 88,
+    "category": "Combos",
+    "image": "",
+    "isAvailable": true
+  },
+  {
+    "id": 5,
+    "name": "Chips & 2 Russians",
+    "subName": "",
+    "description": "Tomato or sweet chilli sauce",
+    "price": 80,
+    "category": "Combos",
+    "image": "",
+    "isAvailable": true
+  },
+  {
+    "id": 6,
+    "name": "Bread",
+    "subName": "1 loaf",
+    "description": "",
+    "price": 29,
+    "category": "Bakery",
+    "image": "",
+    "isAvailable": true
+  },
+  {
+    "id": 7,
+    "name": "Drinks",
+    "subName": "Coke (2L)",
+    "description": "Refreshing cold drink",
+    "price": 38,
+    "category": "Drinks",
+    "image": "",
+    "isAvailable": true
+  }
+],
   "orders": [
     {
       "userId": 1787763467412,

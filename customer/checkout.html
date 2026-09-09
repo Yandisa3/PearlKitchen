@@ -2,23 +2,355 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pearl's Cafe - Checkout</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* ========== TOP NAVBAR ========== */
+        .top-nav {
+            background: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav .brand {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .top-nav .brand span {
+            color: #dc3545;
+        }
+
+        .top-nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-nav .nav-links a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.3s;
+        }
+
+        .top-nav .nav-links a:hover {
+            color: #dc3545;
+        }
+
+        .top-nav .nav-links .cart-link {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .top-nav .nav-links .cart-link:hover {
+            background: #c82333;
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .page-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+        }
+
+        /* ========== FORM CARD ========== */
+        .checkout-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            padding: 26px 28px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-group select,
+        .form-group textarea,
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-family: inherit;
+            color: #1a1a1a;
+            transition: border-color 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus,
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #dc3545;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        /* ========== PAYMENT METHOD ========== */
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .payment-methods label {
+            flex: 1;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+
+        .payment-methods input[type="radio"] {
+            display: none;
+        }
+
+        .payment-methods label.selected {
+            border-color: #dc3545;
+            background: #fff5f5;
+            color: #dc3545;
+        }
+
+        .card-fields {
+            display: none;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 18px;
+            background: #fafbfc;
+        }
+
+        .card-fields .form-group {
+            margin-bottom: 14px;
+        }
+
+        .card-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .card-row .form-group {
+            flex: 1;
+        }
+
+        /* ========== ORDER SUMMARY ========== */
+        .order-summary-box {
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 14px 0;
+        }
+
+        .summary-item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.92em;
+            color: #333;
+        }
+
+        .summary-item-row.total-row {
+            margin-top: 10px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+            font-weight: 700;
+            font-size: 1.05em;
+            color: #1a1a1a;
+        }
+
+        .summary-item-row.total-row .value {
+            color: #dc3545;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn-place-order {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: #dc3545;
+            color: white;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-place-order:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(220, 53, 69, 0.3);
+        }
+
+        /* ========== MESSAGE ========== */
+        #message {
+            display: none;
+            margin-top: 20px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        #message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        #message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 12px 18px;
+                flex-wrap: wrap;
+            }
+
+            .top-nav .brand {
+                font-size: 1.1em;
+            }
+
+            .top-nav .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+            }
+
+            .top-nav .nav-links.open {
+                display: flex;
+            }
+
+            .top-nav .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 8px 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-content {
+                padding: 20px 15px 40px;
+            }
+
+            .page-title {
+                font-size: 1.4em;
+            }
+
+            .checkout-card {
+                padding: 20px 18px;
+            }
+
+            .card-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <h2>🍽️ Pearl's Cafe</h2>
-        <div>
-            <a href="menu.html">Menu</a>
-            <a href="cart.html" class="cart-btn">🛒 Cart (<span id="cartCount">0</span>)</a>
-            <a href="#" onclick="logout()">Logout</a>
+
+    <nav class="top-nav">
+        <div style="display:flex;align-items:center;gap:15px;">
+            <button class="menu-toggle" onclick="toggleMobileNav()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="brand">Pearl's <span>Cafe</span></div>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="menu.html"><i class="fas fa-utensils"></i> Menu</a>
+            <a href="orders.html"><i class="fas fa-clipboard-list"></i> My Orders</a>
+            <a href="cart.html" class="cart-link"><i class="fas fa-shopping-cart"></i> Cart (<span id="cartCount">0</span>)</a>
+            <a href="#" onclick="logout()" style="color:#dc3545;"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </nav>
 
     <div class="main-content">
+
         <h1 class="page-title">Checkout</h1>
-        <div class="checkout-form">
-            <form id="checkoutForm">
+
+        <form id="checkoutForm">
+
+            <div class="checkout-card">
                 <div class="form-group">
                     <label>Order Type</label>
                     <select id="orderType" required>
@@ -30,14 +362,57 @@
                     <label>Delivery Address</label>
                     <textarea id="deliveryAddress" placeholder="Enter your delivery address"></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Order Summary</label>
-                    <div id="orderSummary"></div>
+            </div>
+
+            <div class="checkout-card">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Payment Method</label>
+                    <div class="payment-methods">
+                        <label id="cashLabel" class="selected">
+                            <input type="radio" name="paymentMethod" value="cash" checked>
+                            <span>💵 Cash</span>
+                        </label>
+                        <label id="cardLabel">
+                            <input type="radio" name="paymentMethod" value="card">
+                            <span>💳 Card</span>
+                        </label>
+                    </div>
+
+                    <div class="card-fields" id="cardFields">
+                        <div class="form-group">
+                            <label>Cardholder Name</label>
+                            <input type="text" id="cardName" placeholder="Name on card">
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" maxlength="19">
+                        </div>
+                        <div class="card-row">
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="text" id="cardExpiry" placeholder="MM/YY" inputmode="numeric" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" id="cardCvv" placeholder="123" inputmode="numeric" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Place Order</button>
-            </form>
-        </div>
-        <div id="message" class="message"></div>
+            </div>
+
+            <div class="checkout-card">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Order Summary</label>
+                    <div class="order-summary-box" id="orderSummary"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-place-order">Place Order</button>
+        </form>
+
+        <div id="message"></div>
+
     </div>
 
     <script src="../js/api.js"></script>
@@ -47,23 +422,71 @@
 
         const user = getCurrentUser();
 
+        function toggleMobileNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
         document.getElementById('orderType').addEventListener('change', function() {
             document.getElementById('addressGroup').style.display = this.value === 'delivery' ? 'block' : 'none';
+        });
+
+        // ---- Payment method toggle ----
+        const cashLabel = document.getElementById('cashLabel');
+        const cardLabel = document.getElementById('cardLabel');
+        const cardFields = document.getElementById('cardFields');
+
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                cashLabel.classList.toggle('selected', this.value === 'cash');
+                cardLabel.classList.toggle('selected', this.value === 'card');
+                cardFields.style.display = this.value === 'card' ? 'block' : 'none';
+            });
+        });
+
+        // ---- Card number: auto-space in groups of 4 ----
+        document.getElementById('cardNumber').addEventListener('input', function() {
+            let digits = this.value.replace(/\D/g, '').slice(0, 16);
+            this.value = digits.replace(/(.{4})/g, '$1 ').trim();
+        });
+
+        // ---- Expiry: auto-format MM/YY ----
+        document.getElementById('cardExpiry').addEventListener('input', function() {
+            let digits = this.value.replace(/\D/g, '').slice(0, 4);
+            if (digits.length >= 3) {
+                this.value = digits.slice(0, 2) + '/' + digits.slice(2);
+            } else {
+                this.value = digits;
+            }
+        });
+
+        // ---- CVV: digits only ----
+        document.getElementById('cardCvv').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 4);
         });
 
         function loadCartSummary() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const summary = document.getElementById('orderSummary');
             if (cart.length === 0) {
-                summary.innerHTML = '<p>Your cart is empty.</p>';
+                summary.innerHTML = '<p style="color:#888;">Your cart is empty.</p>';
                 return;
             }
             let total = 0;
             summary.innerHTML = cart.map(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                return `<div>${item.name} x ${item.quantity} = R${itemTotal.toFixed(2)}</div>`;
-            }).join('') + `<div style="font-weight:bold;margin-top:10px;">Total: R${total.toFixed(2)}</div>`;
+                return `
+                    <div class="summary-item-row">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>R${itemTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('') + `
+                <div class="summary-item-row total-row">
+                    <span>Total</span>
+                    <span class="value">R${total.toFixed(2)}</span>
+                </div>
+            `;
             updateCartCount();
         }
 
@@ -79,11 +502,43 @@
             const deliveryAddress = document.getElementById('deliveryAddress').value;
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const message = document.getElementById('message');
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            message.className = '';
 
             if (cart.length === 0) {
                 message.textContent = 'Your cart is empty!';
-                message.className = 'message error';
+                message.className = 'error';
                 return;
+            }
+
+            // ---- Validate card fields if paying by card ----
+            if (paymentMethod === 'card') {
+                const cardName = document.getElementById('cardName').value.trim();
+                const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                const cardExpiry = document.getElementById('cardExpiry').value.trim();
+                const cardCvv = document.getElementById('cardCvv').value.trim();
+
+                if (!cardName) {
+                    message.textContent = 'Please enter the name on the card.';
+                    message.className = 'error';
+                    return;
+                }
+                if (cardNumber.length < 15 || cardNumber.length > 16) {
+                    message.textContent = 'Please enter a valid card number.';
+                    message.className = 'error';
+                    return;
+                }
+                if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+                    message.textContent = 'Please enter a valid expiry date (MM/YY).';
+                    message.className = 'error';
+                    return;
+                }
+                if (cardCvv.length < 3) {
+                    message.textContent = 'Please enter a valid CVV.';
+                    message.className = 'error';
+                    return;
+                }
             }
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -96,13 +551,14 @@
                     status: 'pending',
                     type: orderType,
                     deliveryAddress: orderType === 'delivery' ? deliveryAddress : null,
+                    paymentMethod: paymentMethod,
                     createdAt: new Date().toISOString()
                 };
                 await createOrder(order);
                 localStorage.removeItem('cart');
 
                 message.textContent = '✅ Order placed successfully! Redirecting to track your order...';
-                message.className = 'message success';
+                message.className = 'success';
 
                 setTimeout(() => {
                     window.location.href = 'track.html';
@@ -110,11 +566,27 @@
 
             } catch (error) {
                 message.textContent = '❌ Order failed: ' + error.message;
-                message.className = 'message error';
+                message.className = 'error';
             }
         });
 
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userId');
+                window.location.href = '../index.html';
+            }
+        }
+
         loadCartSummary();
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cart') {
+                updateCartCount();
+            }
+        });
     </script>
+
 </body>
 </html>
