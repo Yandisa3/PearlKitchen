@@ -45,7 +45,7 @@ function logout() {
         currentUser = null;
         localStorage.removeItem('currentUser');
         localStorage.removeItem('userId');
-        window.location.href = 'index.html';
+        window.location.href = '/index.html';
     }
 }
 
@@ -55,7 +55,7 @@ function isLoggedIn() {
 
 function redirectBasedOnRole() {
     const user = getCurrentUser();
-    if (!user) { window.location.href = 'index.html'; return; }
+    if (!user) { window.location.href = '/index.html'; return; }
     
     switch(user.role) {
         case 'customer': window.location.href = 'customer/dashboard.html'; break;
@@ -68,7 +68,7 @@ function redirectBasedOnRole() {
 
 function requireAuth() {
     if (!isLoggedIn()) {
-        window.location.href = 'index.html';
+        window.location.href = '/index.html';
         return false;
     }
     return true;
